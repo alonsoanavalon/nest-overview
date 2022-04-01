@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 
 @Controller('tasks')
@@ -9,7 +9,9 @@ export class TasksController {
   }
   @Post()
   createTask(@Body() task: CreateTaskDto): string {
-    console.log(task);
+    if (task.done === false) {
+      throw new HttpException('Forbidden', 404);
+    }
     return task.title;
   }
 }
